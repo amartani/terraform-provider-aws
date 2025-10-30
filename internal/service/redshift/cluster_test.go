@@ -1321,14 +1321,14 @@ func TestAccRedshiftCluster_passwordWriteOnly(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories,
 		CheckDestroy:             testAccCheckClusterDestroy(ctx),
 		Steps: []resource.TestStep{
-			{
-				Config: testAccClusterConfig_passwordWriteOnly(rName, "Mustbe8characters", 1),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					testAccCheckClusterExists(ctx, resourceName, &v),
-				),
-			},
-			{
-				Config: testAccClusterConfig_passwordWriteOnly(rName, "Mustbe8charactersupdated", 2),
+		{
+			Config: testAccClusterConfig_passwordWriteOnly(rName, "Mustbe8characters", "1"),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				testAccCheckClusterExists(ctx, resourceName, &v),
+			),
+		},
+		{
+			Config: testAccClusterConfig_passwordWriteOnly(rName, "Mustbe8charactersupdated", "2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testAccCheckClusterExists(ctx, resourceName, &v),
 				),
@@ -2076,7 +2076,7 @@ resource "aws_redshift_cluster" "test" {
 `, rName, enabled))
 }
 
-func testAccClusterConfig_passwordWriteOnly(rName, password string, passwordVersion int) string {
+func testAccClusterConfig_passwordWriteOnly(rName, password string, passwordVersion string) string {
 	return fmt.Sprintf(`
 resource "aws_redshift_cluster" "test" {
   cluster_identifier         = %[1]q
@@ -2084,7 +2084,7 @@ resource "aws_redshift_cluster" "test" {
   encrypted                  = true
   master_username            = "foo_test"
   master_password_wo         = %[2]q
-  master_password_wo_version = %[3]d
+  master_password_wo_version = %[3]q
   multi_az                   = false
   node_type                  = "ra3.large"
   allow_version_upgrade      = false

@@ -3009,13 +3009,13 @@ func TestAccRDSCluster_passwordWriteOnly(t *testing.T) {
 		CheckDestroy:             testAccCheckClusterDestroy(ctx),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccClusterConfig_passwordWriteOnly(rName, "valid-password-1", 1),
+				Config: testAccClusterConfig_passwordWriteOnly(rName, "valid-password-1", "1"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testAccCheckClusterExists(ctx, resourceName, &dbCluster),
 				),
 			},
 			{
-				Config: testAccClusterConfig_passwordWriteOnly(rName, "valid-password-2", 2),
+				Config: testAccClusterConfig_passwordWriteOnly(rName, "valid-password-2", "2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testAccCheckClusterExists(ctx, resourceName, &dbCluster),
 				),
@@ -6826,14 +6826,14 @@ resource "aws_rds_cluster" "test" {
 `, rName, password, tfrds.ClusterEngineAuroraMySQL)
 }
 
-func testAccClusterConfig_passwordWriteOnly(rName, password string, passwordVersion int) string {
+func testAccClusterConfig_passwordWriteOnly(rName, password string, passwordVersion string) string {
 	return fmt.Sprintf(`
 resource "aws_rds_cluster" "test" {
   cluster_identifier         = %[1]q
   database_name              = "test"
   master_username            = "tfacctest"
   master_password_wo         = %[2]q
-  master_password_wo_version = %[4]d
+  master_password_wo_version = %[4]q
   engine                     = %[3]q
   skip_final_snapshot        = true
 }

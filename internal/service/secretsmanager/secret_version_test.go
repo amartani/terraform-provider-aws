@@ -292,16 +292,16 @@ func TestAccSecretsManagerSecretVersion_stringWriteOnly(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories,
 		CheckDestroy:             testAccCheckSecretVersionDestroy(ctx),
 		Steps: []resource.TestStep{
-			{
-				Config: testAccSecretVersionConfig_stringWriteOnly(rName, "test-secret", 1),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckSecretVersionExists(ctx, resourceName, &version),
-					testAccCheckSecretVersionWriteOnlyValueEqual(t, &version, "test-secret"),
-					resource.TestCheckResourceAttrPair(resourceName, names.AttrARN, secretResourceName, names.AttrARN),
-				),
-			},
-			{
-				Config: testAccSecretVersionConfig_stringWriteOnly(rName, "test-secret2", 2),
+		{
+			Config: testAccSecretVersionConfig_stringWriteOnly(rName, "test-secret", "1"),
+			Check: resource.ComposeTestCheckFunc(
+				testAccCheckSecretVersionExists(ctx, resourceName, &version),
+				testAccCheckSecretVersionWriteOnlyValueEqual(t, &version, "test-secret"),
+				resource.TestCheckResourceAttrPair(resourceName, names.AttrARN, secretResourceName, names.AttrARN),
+			),
+		},
+		{
+			Config: testAccSecretVersionConfig_stringWriteOnly(rName, "test-secret2", "2"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckSecretVersionExists(ctx, resourceName, &version),
 					testAccCheckSecretVersionWriteOnlyValueEqual(t, &version, "test-secret2"),
@@ -396,7 +396,7 @@ resource "aws_secretsmanager_secret_version" "test" {
 `, rName)
 }
 
-func testAccSecretVersionConfig_stringWriteOnly(rName, secret string, version int) string {
+func testAccSecretVersionConfig_stringWriteOnly(rName, secret string, version string) string {
 	return fmt.Sprintf(`
 resource "aws_secretsmanager_secret" "test" {
   name = %[1]q
@@ -405,7 +405,7 @@ resource "aws_secretsmanager_secret" "test" {
 resource "aws_secretsmanager_secret_version" "test" {
   secret_id                = aws_secretsmanager_secret.test.id
   secret_string_wo         = %[2]q
-  secret_string_wo_version = %[3]d
+  secret_string_wo_version = %[3]q
 }
 `, rName, secret, version)
 }

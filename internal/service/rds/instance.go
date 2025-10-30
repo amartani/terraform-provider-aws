@@ -505,11 +505,11 @@ func resourceInstance() *schema.Resource {
 				ConflictsWith: []string{"manage_master_user_password", names.AttrPassword},
 				RequiredWith:  []string{"password_wo_version"},
 			},
-			"password_wo_version": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				RequiredWith: []string{"password_wo"},
-			},
+		"password_wo_version": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"password_wo"},
+		},
 			"performance_insights_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,

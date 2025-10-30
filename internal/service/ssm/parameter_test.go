@@ -217,15 +217,15 @@ func TestAccSSMParameter_writeOnly(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories,
 		CheckDestroy:             testAccCheckParameterDestroy(ctx),
 		Steps: []resource.TestStep{
-			{
-				Config: testAccParameterConfig_writeOnly(rName, "test", 1),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckParameterExists(ctx, resourceName, &param),
-					testAccCheckParameterWriteOnlyValueEqual(t, &param, "test"),
-				),
-			},
-			{
-				Config: testAccParameterConfig_writeOnly(rName, "testUpdated", 2),
+		{
+			Config: testAccParameterConfig_writeOnly(rName, "test", "1"),
+			Check: resource.ComposeTestCheckFunc(
+				testAccCheckParameterExists(ctx, resourceName, &param),
+				testAccCheckParameterWriteOnlyValueEqual(t, &param, "test"),
+			),
+		},
+		{
+			Config: testAccParameterConfig_writeOnly(rName, "testUpdated", "2"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckParameterExists(ctx, resourceName, &param),
 					testAccCheckParameterWriteOnlyValueEqual(t, &param, "testUpdated"),
@@ -1694,13 +1694,13 @@ resource "aws_kms_alias" "test_alias" {
 `, rName, value, keyAlias)
 }
 
-func testAccParameterConfig_writeOnly(rName string, value string, valueVersion int) string {
+func testAccParameterConfig_writeOnly(rName string, value string, valueVersion string) string {
 	return fmt.Sprintf(`
 resource "aws_ssm_parameter" "test" {
   name             = %[1]q
   type             = "String"
   value_wo         = %[2]q
-  value_wo_version = %[3]d
+  value_wo_version = %[3]q
 }
 `, rName, value, valueVersion)
 }

@@ -997,11 +997,11 @@ func TestAccRDSInstance_passwordWriteOnly(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Password should not be shown in error message
 			{
-				Config:      testAccInstanceConfig_passwordWriteOnly(rName, "invalid", 1),
+				Config:      testAccInstanceConfig_passwordWriteOnly(rName, "invalid", "1"),
 				ExpectError: regexache.MustCompile(`MasterUserPassword is not a valid password because it is shorter than 8 characters`),
 			},
 			{
-				Config: testAccInstanceConfig_passwordWriteOnly(rName, "valid-password-1", 1),
+				Config: testAccInstanceConfig_passwordWriteOnly(rName, "valid-password-1", "1"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testAccCheckDBInstanceExists(ctx, resourceName, &v1),
 				),
@@ -1018,7 +1018,7 @@ func TestAccRDSInstance_passwordWriteOnly(t *testing.T) {
 				},
 			},
 			{
-				Config: testAccInstanceConfig_passwordWriteOnly(rName, "valid-password-2", 2),
+				Config: testAccInstanceConfig_passwordWriteOnly(rName, "valid-password-2", "2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testAccCheckDBInstanceExists(ctx, resourceName, &v2),
 					testAccCheckDBInstanceNotRecreated(&v1, &v2),
@@ -10284,7 +10284,7 @@ resource "aws_db_instance" "test" {
 `, rName, password))
 }
 
-func testAccInstanceConfig_passwordWriteOnly(rName, password string, passwordVersion int) string {
+func testAccInstanceConfig_passwordWriteOnly(rName, password string, passwordVersion string) string {
 	return acctest.ConfigCompose(
 		testAccInstanceConfig_orderableClassMySQL(),
 		fmt.Sprintf(`
@@ -10294,7 +10294,7 @@ resource "aws_db_instance" "test" {
   identifier          = %[1]q
   instance_class      = data.aws_rds_orderable_db_instance.test.instance_class
   password_wo         = %[2]q
-  password_wo_version = %[3]d
+  password_wo_version = %[3]q
   username            = "tfacctest"
   skip_final_snapshot = true
 }

@@ -28,7 +28,7 @@ resource "aws_db_instance" "test" {
   instance_class      = data.aws_rds_orderable_db_instance.test.instance_class
   skip_final_snapshot = true
   password_wo         = ephemeral.aws_secretsmanager_random_password.test.random_password
-  password_wo_version = 1
+  password_wo_version = "1"
   username            = "tfacctest"
 
   tags = var.resource_tags

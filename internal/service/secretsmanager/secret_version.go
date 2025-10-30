@@ -85,12 +85,12 @@ func resourceSecretVersion() *schema.Resource {
 				ConflictsWith: []string{"secret_binary", "secret_string"},
 				RequiredWith:  []string{"secret_string_wo_version"},
 			},
-			"secret_string_wo_version": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				ForceNew:     true,
-				RequiredWith: []string{"secret_string_wo"},
-			},
+		"secret_string_wo_version": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			ForceNew:     true,
+			RequiredWith: []string{"secret_string_wo"},
+		},
 			"version_id": {
 				Type:     schema.TypeString,
 				Computed: true,

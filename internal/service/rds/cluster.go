@@ -366,11 +366,11 @@ func resourceCluster() *schema.Resource {
 				ConflictsWith: []string{"manage_master_user_password", "master_password"},
 				RequiredWith:  []string{"master_password_wo_version"},
 			},
-			"master_password_wo_version": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				RequiredWith: []string{"master_password_wo"},
-			},
+		"master_password_wo_version": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"master_password_wo"},
+		},
 			"master_username": {
 				Type:     schema.TypeString,
 				Computed: true,

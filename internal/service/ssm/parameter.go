@@ -144,11 +144,11 @@ func resourceParameter() *schema.Resource {
 				ExactlyOneOf: []string{"value_wo", "insecure_value", names.AttrValue},
 				RequiredWith: []string{"value_wo_version"},
 			},
-			"value_wo_version": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				RequiredWith: []string{"value_wo"},
-			},
+		"value_wo_version": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"value_wo"},
+		},
 			names.AttrVersion: {
 				Type:     schema.TypeInt,
 				Computed: true,
